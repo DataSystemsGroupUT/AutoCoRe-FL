@@ -1,10 +1,10 @@
 
 # AutoCoRe-FL: Automatic Concept-based Rule Reasoning in Federated Learning
 
-This repository contains the official PyTorch implementation and experimental setup for the paper: **"AutoCoRe-FL: Automatic Concept-based Rule Reasoning in Federated Learning"**.
+This repository contains the official implementation and experimental setup for the paper: **"AutoCoRe-FL: Automatic Concept-based Rule Reasoning in Federated Learning"**.
 
 
-**Authors:** Ahmed Wael, Radwa El Shawi
+**Authors:** Ahmed Soliman, Radwa El Shawi
 
 ## Abstract
 Federated learning (FL) is a decentralized paradigm for collaboratively training machine learning models while maintaining data privacy across clients. However, the inherent distribution of data and privacy constraints in FL pose significant challenges to achieving global interpretability and model transparency. To overcome these limitations, we propose AutoCoRe-FL, a framework for symbolic reasoning in FL that enables interpretable model explanations without requiring predefined or manually labeled concepts. In AutoCoRe-FL, each client automatically discovers high-level, semantically meaningful concepts from their local data. These concepts represent the abstract, human-understandable explanation units that capture the underlying structure of the data. Clients then represent their data samples as binary vectors of these concepts and generate symbolic rules based on them, which serve as interpretable explanations for model predictions. These rules are sent to the server, where an iterative symbolic aggregation process refines and aligns the rules into a coherent global model. Experimental results on benchmark datasets show that AutoCoRe-FL achieves competitive predictive performance while producing compact, accurate, and transparent symbolic explanations, significantly outperforming LR-XFL—the current state-of-the-art interpretable FL baseline that relies on predefined concept supervision.
