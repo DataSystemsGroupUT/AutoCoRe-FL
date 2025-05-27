@@ -67,7 +67,7 @@ Note that we have 2 scripts for each experiment. ds is short for dataset, either
 ### 2. Clone Repository
 
 ```bash
-git clone https://github.com/[Your GitHub Username]/AutoCoRe-FL.git
+git clone https://github.com/DataSystemsGroupUT/AutoCoRe-FL.git
 cd AutoCoRe-FL
 ```
 
