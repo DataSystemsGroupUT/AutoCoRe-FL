@@ -1,0 +1,91 @@
+# Configuration for AutoCoRe-FL Stages 1&2 followed by LR-XFL Stage 3
+
+method_name: "LRXFL_FL_AutoCore_ade20k"
+seed: 42
+device: "cuda" 
+run_id_base: "LRXFL_FL_AutoCore_ade20k" 
+log_level: "INFO"
+
+chosen_classes:
+  - "street"
+  - "bedroom"
+  - "living_room"
+  - "bathroom"
+  - "kitchen"
+  - "skyscraper"
+  - "highway"
+  - "conference_room"
+  - "mountain_snowy"
+  - "office"
+  - "corridor"
+  - "airport_terminal"
+  - "attic"
+  - "mountain"
+  - "park"
+  - "coast"
+  - "alley"
+  - "beach"
+  - "childs_room" 
+  - "art_gallery"
+  - "castle"
+  - "dorm_room"
+  - "nursery"
+  - "lobby"
+  - "reception" 
+  - "bar"
+  - "house"
+  - "bridge"
+  - "classroom"
+
+# --- Cached Data Input Paths ---
+cached_data_base_dir: "./generated_autocore_fl_caches_reused_npy_10clients_ade20k/ade20k_reused_npy"
+partition_segment_infos_cache_dir_input: "partition_segment_infos_with_crops"
+embedding_cache_dir_input: "partition_embedding_cache"
+partition_manifest_dir_input: "partition_manifests"
+scene_to_idx_map_filename_input: "scene_to_idx_map.json"
+# ... existing parameters ...
+noise_experiment_enabled: true     # or false
+noise_client_percentage: 0.2      # e.g., 20% of clients
+noise_label_shuffle_degree: 0.5  # e.g., 50% of their labels shuffled
+# --- AutoCoRe-FL: SAM/DINO Models (for internal client/server use in Stage 2) ---
+sam_cfg: "configs/sam2.1/sam2.1_hiera_t.yaml"
+sam_ckpt: "/gpfs/helios/home/soliman/logic_explained_networks/experiments/sam2.1_hiera_tiny.pt" # !!! ADJUST !!!
+dino_model: "facebook/dinov2-base"
+
+embedding_type: "dino_only"
+embedding_dim: 768
+
+# --- AutoCoRe-FL: General FL Parameters ---
+num_clients: 10 
+
+# --- AutoCoRe-FL: Stage 1 K-Means Parameters ---
+num_clusters: 100
+kmeans_rounds: 5
+min_samples_per_concept_cluster: 30
+
+# --- AutoCoRe-FL: Stage 2 Concept Detector Parameters ---
+detector_type: "lr"
+detector_min_samples_per_class: 20
+detector_cv_splits: 3
+pca_n_components: 128
+lr_max_iter: 10000
+svm_C: 1.0
+min_detector_score: 0.65
+vectorizer_min_activating_segments: 1
+
+# --- LR-XFL: Stage 3 Federated Rule Learning Parameters ---
+# These are from your 3_run_xfl_with_predicted_concepts.py
+lrxfl_max_epoch: 10                # Global FL rounds for LR-XFL
+lrxfl_local_epochs: 30             # Local epochs for client's Explainer training
+lrxfl_sample_type: 'non-iid'           # Data sampling for LR-XFL clients (will be effectively IID due to AutoCoRe partitioning)
+lrxfl_topk_explanations_local: 50
+lrxfl_topk_explanations_global: 3  # For server aggregation in LR-XFL
+lrxfl_logic_generation_threshold: 0.8 # Min accuracy for local Explainer to generate rules
+lrxfl_learning_rate: 0.01          # LR for the Explainer model
+lrxfl_l1_reg: 0.001               # L1 regularization for Explainer
+lrxfl_temperature: 0.7             # Temperature for EntropyLinear layer in Explainer
+lrxfl_explainer_hidden: [10]       # Hidden layers for the Explainer MLP
+lrxfl_batch_size: 64               # Batch size for LR-XFL client DataLoaders
+
+# --- Output Directory for this Combined Run ---
+output_base_dir_combined_run: "./results/lrxfl_fl_autocore_results_sun" # !!! ADJUST AS DESIRED !!!

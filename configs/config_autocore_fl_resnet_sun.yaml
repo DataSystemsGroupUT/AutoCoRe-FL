@@ -1,0 +1,53 @@
+# --- Paths to Pre-computed ResNet18 Concept Features (Output of Stage 2) ---
+# Directory where X_binary.npy, Y_scenes.npy etc. from 2_generate_predicted_concept_features.py are located
+features_load_dir: "/gpfs/helios/home/soliman/logic_explained_networks/experiments/features/sunrgbd_3scenes_predicted_concepts" # UPDATE THIS
+# Filename parts (ensure these match EXACTLY what 2_generate_predicted_concept_features.py produced)
+model_arch_fn_part: "resnet18_tl_sunrgbd3cls" # e.g., "ade20k_concept_predictor_resnet18"
+# Scene list used to generate these features (MUST BE IDENTICAL TO THE ONE IN 2_generate...py)
+# This is used to reconstruct the NPY filenames correctly.
+scenes_for_filename_part:
+  - "bathroom"
+  - "bedroom"
+  - "bookstore"
+
+# --- Experiment Setup ---
+method_name: "AutoCoRe_FL_ResNetConcepts"
+seed: 42
+device: "cuda" # "cuda" or "cpu"
+
+# --- Federated Learning Parameters ---
+num_users: 10 # Number of clients
+fl_rounds: 10 
+local_figs_epochs: 1 # Not really 'epochs' for FIGS, but signifies one local FIGS model build per FL round.
+federated_sampling: "non-iid" # 'iid' or 'non-iid' (non-iid by concept feature presence or scene label)
+# For non-iid by concept, specify number of majority concepts per client if using that sampler
+# non_iid_concepts_per_client: 3 # Only if using ade20k_noniid_by_concept
+
+# Splitting of the loaded ResNet18 concept dataset
+server_split_ratio: 0.1 # Fraction of total data for server (split into val/test)
+server_val_test_split_ratio: 0.5 # How to split the server's data (0.5 means 50% for val, 50% for test)
+
+# --- Parameters (for clients) ---
+figs_params:
+  max_rules: 30 # Max rules for each client's local h_k^(m) model
+  min_impurity_decrease: 0.0
+  max_trees: 1 # Let max_rules dominate
+  max_features: null # Consider all features
+
+# --- GBM Boosting Parameters ---
+learning_rate_gbm: 0.1 # The 'nu' for F_m = F_{m-1} + nu * h^(m)
+
+# --- Server-Side Rule Aggregation & Validation (for h^(m)) ---
+min_clients_for_figs_term: 1 # Min clients contributing a rule for it to be considered
+server_rule_validation_min_precision: 0.3 # On server's validation concept data
+server_rule_min_coverage_count: 5       # On server's validation concept data
+use_accuracy_weighting_server: true    # For weighting client rule contributions
+max_global_figs_terms: 100             # Max terms to keep in the aggregated h^(m) after pruning/Pareto
+use_pareto_optimization_server: true  # Whether to use pareto_select from aggregation.py
+
+# --- Convergence ---
+rule_structure_convergence_patience: 2 # Stop if h^(m) is stable for this many rounds
+
+# --- Output & Logging ---
+# base_results_dir will be created by the script: results/METHOD_NAME_run_YYYYMMDD_HHMMSS
+log_level: "INFO"
