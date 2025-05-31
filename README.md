@@ -30,12 +30,12 @@ AutoCoRe-FL/
 │   └── ...
 ├── features/                   # Directory for storing intermediate predicted concept features (e.g., from ResNet18)
 ├── trained_models/             # Directory for storing trained concept predictors or final models
-├── autocore_fl/                # Core AutoCoRe-FL library code
-│   ├── concepts/               # Concept discovery, detector training, vectorization
-│   ├── embedding/              # Embedding model loaders (DINOv2)
-│   ├── federated/              # Client, Server, Aggregation logic for FL
-│   ├── segmentation/           # SAM model loader, segment processing
-│   └── utils/                  # Utility functions (logging, config, etc.)
+├── clustering/                   # federated kmeans
+├── concepts/                     # Concept discovery, detector training, vectorization
+├── embedding/                    # Embedding model loaders (DINOv2)
+├── federated/                    # Client, Server, Aggregation logic for FL
+├── segmentation/                 # SAM model loader, segment processing
+├── visualization/                # visualization functions
 ├── lens_framework_stubs/       # Stubs or interface code for LENS/LR-XFL components if adapted
 ├── scripts/                    # Main runnable experiment scripts
 │   ├── run_autocore_cent_auto_ade20k.py    # Centralized AutoCoRe with automatic concept extraction (ADE20k)
@@ -51,8 +51,7 @@ AutoCoRe-FL/
 ├── sulrm_jobs/                 # slurm jobs to run on HPC environment
 ├── results/                    # Output directory for experiment results, logs, plots
 ├── requirements.txt            # Pip requirements file
-
-└── README.md                   # This file
+└── README.md                   
 ```
 Note that we have 2 scripts for each experiment. ds is short for dataset, either ade20k or sun
 ## Setup
