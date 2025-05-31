@@ -1,0 +1,43 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*build/
+*develop-eggs/
+*dist/
+*downloads/
+*eggs/
+*.egg-info/
+*htmlcov/
+*.log # Or specific log directories like results/*/logs/
+*.pot
+*.py[cod]
+*share/python-wheels/
+*.tox
+*venv/
+*pip-wheel-metadata/
+*pytest_cache/
+.coverage
+.env
+.DS_Store
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+results/
+experiment_results_centralized/
+autocore_fl_run_results_final/
+autocore_then_lrxfl_results/
+cache_centralized_runs_multidataset_reusednpy/
+generated_autocore_fl_caches_reused_npy_10clients/
+features/
+trained_models/ # Unless you intend to provide small, essential pre-trained models
+logic/
+scripts/cache_centralized_runs/
+scripts/cache_centralized_reused/
+scripts/cache_centralized/
+
+scripts/experiment_results/
+# IDE specific
+.vscode/
+.idea/

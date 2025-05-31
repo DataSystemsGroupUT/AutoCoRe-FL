@@ -1,0 +1,97 @@
+# Configuration for running AutoCoRe-FL with pre-cached data from generate_deterministic_cached_data_ade20k.py
+
+method_name: "AutoCoRe_FL_Auto"
+seed: 42
+device: "cuda" # "cuda" or "cpu"
+run_id_base: "autocore_fl_ade20k" # Base for generating the full unique run_id
+log_level: "INFO" # "DEBUG", "INFO", "WARNING", "ERROR"
+num_classes: 29 # Number of classes in the dataset (for logging and checks)
+# --- List of Chosen Classes (MUST MATCH THE DATA GENERATED ) ---
+chosen_classes:
+  - "street"
+  - "bedroom"
+  - "living_room"
+  - "bathroom"
+  - "kitchen"
+  - "skyscraper"
+  - "highway"
+  - "conference_room"
+  - "mountain_snowy"
+  - "office"
+  - "corridor"
+  - "airport_terminal"
+  - "attic"
+  - "mountain"
+  - "park"
+  - "coast"
+  - "alley"
+  - "beach"
+  - "childs_room" 
+  - "art_gallery"
+  - "castle"
+  - "dorm_room"
+  - "nursery"
+  - "lobby"
+  - "reception"
+  - "bar"
+  - "house"
+  - "bridge"
+  - "classroom"
+
+cached_data_base_dir: "./generated_autocore_fl_caches_reused_npy_10clients_ade20k/ade20k_reused_npy"
+partition_segment_infos_cache_dir_input: "partition_segment_infos_with_crops"
+embedding_cache_dir_input: "partition_embedding_cache"
+partition_manifest_dir_input: "partition_manifests"
+scene_to_idx_map_filename_input: "scene_to_idx_map.json" # Path relative to cached_data_base_dir/partition_manifest_dir_input
+
+# --- SAM/DINO Models (Still needed by Client/Server for internal operations in Stage 2) ---
+sam_cfg: "configs/sam2.1/sam2.1_hiera_t.yaml"
+sam_ckpt: "/gpfs/helios/home/soliman/logic_explained_networks/experiments/sam2.1_hiera_tiny.pt" 
+dino_model: "facebook/dinov2-base"
+
+# --- Embedding Settings (Must match the pre-cached embeddings) ---
+embedding_type: "dino_only"
+embedding_dim: 768
+
+# --- Federated Learning General Parameters ---
+num_clients: 10
+
+# --- Stage 1: Federated K-Means Parameters ---
+num_clusters: 100
+kmeans_rounds: 15
+min_samples_per_concept_cluster: 30
+
+# --- Stage 2: Concept Detector Parameters ---
+detector_type: "lr"
+detector_min_samples_per_class: 20
+detector_cv_splits: 3
+pca_n_components: 128
+lr_max_iter: 10000
+svm_C: 1.0
+min_detector_score: 0.7
+vectorizer_min_activating_segments: 1
+
+# --- Noise Experiment Parameters ---
+noise_experiment_enabled: false     # Set to true to run with noise, false for standard run
+noise_client_percentage: 0.8      # t% of clients to be noisy (e.g., 0.2 for 20%)
+noise_label_shuffle_degree: 0.5  # Percentage of a noisy client's local labels to shuffle (e.g., 0.5 for 50%)
+# noise_type is implicitly 'client_label_shuffle' based on your description
+# --- Stage 3: AutoCore-FL Rule Learning Parameters ---
+figs_params:
+  max_rules: 40
+  max_trees: 3
+  min_impurity_decrease: 0.0
+  max_features: null
+
+learning_rate_gbm: 0.1
+phase2_rounds: 10
+rule_structure_convergence_patience: 3
+
+max_global_figs_terms: 100
+min_clients_for_figs_term: 1
+use_accuracy_weighting_server: true
+server_rule_validation_min_precision: 0.3
+server_rule_min_coverage_count: 5
+
+# --- Output Directory for this FL Run ---
+output_base_dir_fl_run: "./results/autocore_fl_run_results_final_ade20k"
